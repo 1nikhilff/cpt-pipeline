@@ -1,0 +1,2285 @@
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CPT Code Prediction Pipeline</title>
+
+<style>
+.download-btn{
+  padding:12px 18px;
+  border:none;
+  border-radius:12px;
+  background:#7c5cff;
+  color:white;
+  font-size:15px;
+  cursor:pointer;
+  margin-bottom:25px;
+  transition:0.2s;
+}
+
+.download-btn:hover{
+  transform:translateY(-2px);
+  opacity:0.9;
+}
+:root{
+  --bg:#111315;
+  --card:#1a1d22;
+  --card2:#22262d;
+  --text:#f5f5f5;
+  --muted:#9aa4b2;
+  --border:#313843;
+  --accent:#7c5cff;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter, sans-serif;
+  padding:40px;
+  line-height:1.6;
+}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+}
+
+h1{
+  font-size:34px;
+  margin-bottom:10px;
+}
+
+.subtitle{
+  color:var(--muted);
+  margin-bottom:35px;
+}
+
+.main-step{
+  border:1px solid var(--border);
+  border-radius:18px;
+  overflow:hidden;
+  margin-bottom:18px;
+  background:var(--card);
+}
+
+.main-header{
+  padding:22px;
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  transition:0.2s;
+}
+
+.main-header:hover{
+  background:var(--card2);
+}
+
+.main-title{
+  font-size:22px;
+  font-weight:700;
+}
+
+.main-mini{
+  color:var(--muted);
+  margin-top:4px;
+}
+
+.main-content{
+  display:none;
+  padding:25px;
+  border-top:1px solid var(--border);
+}
+
+.main-content.open{
+  display:block;
+}
+
+.main-desc{
+  margin-bottom:22px;
+  color:#d4d8dd;
+  white-space:pre-wrap;
+}
+
+.formula-box{
+  background:#0d1117;
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:18px;
+  overflow:auto;
+  white-space:pre-wrap;
+  font-family:monospace;
+  margin-top:18px;
+  margin-bottom:20px;
+}
+
+.kpi-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px;
+  margin-top:20px;
+  margin-bottom:20px;
+}
+
+.kpi-card{
+  background:#15181d;
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:16px;
+}
+
+.kpi-key{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+
+.kpi-value{
+  font-size:15px;
+  font-weight:600;
+}
+
+.params-box{
+  margin-top:15px;
+  margin-bottom:22px;
+}
+
+.param-chip{
+  display:inline-block;
+  padding:8px 12px;
+  margin:5px;
+  border-radius:999px;
+  background:#242932;
+  border:1px solid var(--border);
+  font-size:13px;
+  font-family:monospace;
+}
+
+.nested-card{
+  border:1px solid var(--border);
+  border-radius:14px;
+  overflow:hidden;
+  margin-top:16px;
+  background:#16191e;
+}
+
+.nested-header{
+  padding:18px;
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  transition:0.2s;
+}
+
+.nested-header:hover{
+  background:#20242c;
+}
+
+.nested-title{
+  font-size:17px;
+  font-weight:600;
+}
+
+.nested-mini{
+  color:var(--muted);
+  font-size:14px;
+  margin-top:3px;
+}
+
+.nested-content{
+  display:none;
+  padding:20px;
+  border-top:1px solid var(--border);
+}
+
+.nested-content.open{
+  display:block;
+}
+
+.nested-desc{
+  white-space:pre-wrap;
+  color:#d0d5db;
+}
+
+.level-1{
+  margin-left:20px;
+}
+
+.level-2{
+  margin-left:40px;
+}
+
+.level-3{
+  margin-left:60px;
+}
+
+.level-4{
+  margin-left:80px;
+}
+
+.tag{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  background:#252b34;
+  margin:4px;
+  font-size:12px;
+}
+
+</style>
+</head>
+
+<body>
+ <button onclick="downloadHTML()" class="download-btn">
+Download Pipeline
+</button>
+<div class="container">
+
+<h1>CPT Code Prediction Pipeline — Pure Semantic Overview</h1>
+
+<p class="subtitle">
+Interactive expandable AI architecture explorer
+</p>
+
+<div id="pipeline">
+
+      <div class="main-step">
+
+        <div class="main-header" onclick="toggleBox('step_0')">
+
+          <div>
+            <div class="main-title">Step 1 — Load &amp; filter CPT codes</div>
+            <div class="main-mini">CSV filtering and preprocessing</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="main-content" id="step_0">
+
+          <div class="main-desc">Read lookup CSV → keep only 5-digit numeric CPT codes → reset index.</div>
+
+          <pre class="formula-box">Regex Pattern:
+^\d{5}$</pre>
+
+          <div class="kpi-grid">
+
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Filter pattern</div>
+                <div class="kpi-value">^\d{5}$</div>
+              </div>
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Key columns</div>
+                <div class="kpi-value">CODE · LONG_DESC · SUBCATEGORY</div>
+              </div>
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Output</div>
+                <div class="kpi-value">cpt_db — N-row DataFrame</div>
+              </div>
+            
+
+          </div>
+
+          <div class="params-box">
+
+            
+
+          </div>
+
+          
+
+        </div>
+
+      </div>
+
+    
+
+      <div class="main-step">
+
+        <div class="main-header" onclick="toggleBox('step_1')">
+
+          <div>
+            <div class="main-title">Step 2 — Build CPT text &amp; embedding matrix</div>
+            <div class="main-mini">BioBERT semantic encoding</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="main-content" id="step_1">
+
+          <div class="main-desc">build_cpt_text(): long description + short description, stop word-cleaned → BioBERT encodes all rows at once.</div>
+
+          <pre class="formula-box">text = clean(long_desc + short_desc)
+
+matrix shape =
+[N_cpt × 768]
+
+float32
+(L2-normalised)</pre>
+
+          <div class="kpi-grid">
+
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Encoding</div>
+                <div class="kpi-value">L2-normalised</div>
+              </div>
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Embedding Size</div>
+                <div class="kpi-value">768</div>
+              </div>
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Data Type</div>
+                <div class="kpi-value">float32</div>
+              </div>
+            
+
+          </div>
+
+          <div class="params-box">
+
+            
+              <span class="param-chip">MODEL = BioBERT-mnli-scinli-mednli-stsb</span>
+            
+
+          </div>
+
+          
+
+      <div class="nested-card level-0">
+
+        <div class="nested-header" onclick="toggleBox('nested_nhyjsqq')">
+
+          <div>
+            <div class="nested-title">Text Cleaning</div>
+            <div class="nested-mini">Preprocessing pipeline</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="nested-content" id="nested_nhyjsqq">
+
+          <div class="nested-desc">Combines long and short descriptions.
+
+Stop words are removed before encoding.
+
+Output becomes semantically compressed medical text.</div>
+
+          <pre class="formula-box">clean(
+long_desc + short_desc
+)</pre>
+
+          
+
+        </div>
+
+      </div>
+
+    
+
+      <div class="nested-card level-0">
+
+        <div class="nested-header" onclick="toggleBox('nested_9axy0rn')">
+
+          <div>
+            <div class="nested-title">BioBERT Encoding</div>
+            <div class="nested-mini">Medical semantic embeddings</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="nested-content" id="nested_9axy0rn">
+
+          <div class="nested-desc">All CPT rows are encoded simultaneously into dense semantic vectors using BioBERT.</div>
+
+          <pre class="formula-box">BioBERT(text)
+↓
+768-dimensional embedding</pre>
+
+          
+
+        </div>
+
+      </div>
+
+    
+
+        </div>
+
+      </div>
+
+    
+
+      <div class="main-step">
+
+        <div class="main-header" onclick="toggleBox('step_2')">
+
+          <div>
+            <div class="main-title">Step 3 — Build corpus IDF table (G1)</div>
+            <div class="main-mini">Dynamic token weighting</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="main-content open" id="step_2">
+
+          <div class="main-desc">Compute IDF for every token across all CPT_processed_text.
+
+Powers dynamic field weighting in build_device_text().</div>
+
+          <pre class="formula-box">IDF(tok) =
+log((1 + N)/(1 + df_in_corpus))
+
+where:
+
+N = total CPT docs
+df = document frequency of token</pre>
+
+          <div class="kpi-grid">
+
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Coverage</div>
+                <div class="kpi-value">All unique tokens in cpt_db</div>
+              </div>
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Used by</div>
+                <div class="kpi-value">G1 · G2 · Positive Anchors</div>
+              </div>
+            
+
+          </div>
+
+          <div class="params-box">
+
+            
+
+          </div>
+
+          
+
+      <div class="nested-card level-0">
+
+        <div class="nested-header" onclick="toggleBox('nested_4e274w1')">
+
+          <div>
+            <div class="nested-title">Dynamic Weight Scaling</div>
+            <div class="nested-mini">Rare vocabulary amplification</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="nested-content" id="nested_4e274w1">
+
+          <div class="nested-desc">Rare tokens receive larger IDF scores.
+
+Higher IDF results in stronger weighting during device text construction.</div>
+
+          <pre class="formula-box">Rare token
+↓
+Higher IDF
+↓
+Higher semantic influence</pre>
+
+          
+
+        </div>
+
+      </div>
+
+    
+
+        </div>
+
+      </div>
+
+    
+
+      <div class="main-step">
+
+        <div class="main-header" onclick="toggleBox('step_3')">
+
+          <div>
+            <div class="main-title">Step 4 — SubcategoryRouter init</div>
+            <div class="main-mini">Search-space reduction</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="main-content" id="step_3">
+
+          <div class="main-desc">Embeds all unique CPT subcategory names.
+
+At query time, cosine-matches device subcategory → selects narrow CPT search pool.</div>
+
+          <pre class="formula-box">sim =
+cosine(
+embed(device_subcat),
+embed(cpt_subcat_i)
+)
+
+select if:
+sim ≥ SUBCAT_SIM_THRESHOLD</pre>
+
+          <div class="kpi-grid">
+
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Match threshold</div>
+                <div class="kpi-value">cosine ≥ 0.70</div>
+              </div>
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Max subcategories</div>
+                <div class="kpi-value">3</div>
+              </div>
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Fallback</div>
+                <div class="kpi-value">Search ALL CPT codes</div>
+              </div>
+            
+
+          </div>
+
+          <div class="params-box">
+
+            
+              <span class="param-chip">SUBCAT_SIM_THRESHOLD = 0.70</span>
+            
+              <span class="param-chip">MAX_EXTRA_SUBCATEGORIES = 3</span>
+            
+
+          </div>
+
+          
+
+      <div class="nested-card level-0">
+
+        <div class="nested-header" onclick="toggleBox('nested_do4113t')">
+
+          <div>
+            <div class="nested-title">Fallback Mechanism</div>
+            <div class="nested-mini">Recovery search path</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="nested-content" id="nested_do4113t">
+
+          <div class="nested-desc">If no subcategory satisfies similarity threshold:
+
+System searches entire CPT corpus.</div>
+
+          <pre class="formula-box">No match
+↓
+Fallback = TRUE
+↓
+Search all CPT codes</pre>
+
+          
+
+        </div>
+
+      </div>
+
+    
+
+        </div>
+
+      </div>
+
+    
+
+      <div class="main-step">
+
+        <div class="main-header" onclick="toggleBox('step_4')">
+
+          <div>
+            <div class="main-title">Step 5 — build_device_text() — G1 dynamic field weighting</div>
+            <div class="main-mini">Weighted metadata representation</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="main-content" id="step_4">
+
+          <div class="main-desc">Assembles device query text from 7 metadata fields.
+
+Each field repeated 1–5× based on mean corpus IDF.
+
+Fields with rare/specific vocabulary receive higher weighting automatically.</div>
+
+          <pre class="formula-box">repeat(field) = clip(
+
+FIELD_IDF_WEIGHT_MIN
++
+round(
+
+mean_idf(field_tokens)
+/ max_corpus_idf
+
+×
+
+(FIELD_IDF_WEIGHT_MAX
+- FIELD_IDF_WEIGHT_MIN)
+
+),
+
+1,
+5
+
+)</pre>
+
+          <div class="kpi-grid">
+
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Fields</div>
+                <div class="kpi-value">7 metadata fields</div>
+              </div>
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Repeat range</div>
+                <div class="kpi-value">1× → 5×</div>
+              </div>
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Definition Prefix</div>
+                <div class="kpi-value">150 chars</div>
+              </div>
+            
+
+          </div>
+
+          <div class="params-box">
+
+            
+              <span class="param-chip">DEFINITION_PREFIX_LEN = 150</span>
+            
+              <span class="param-chip">FIELD_IDF_WEIGHT_MIN = 1</span>
+            
+              <span class="param-chip">FIELD_IDF_WEIGHT_MAX = 5</span>
+            
+
+          </div>
+
+          
+
+      <div class="nested-card level-0">
+
+        <div class="nested-header" onclick="toggleBox('nested_hfjykl7')">
+
+          <div>
+            <div class="nested-title">7 Metadata Fields</div>
+            <div class="nested-mini">Device semantic construction</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="nested-content" id="nested_hfjykl7">
+
+          <div class="nested-desc">DEFINITION
+productCodeName
+DEVICENAME
+deviceDescription
+TARGETAREA
+PHYSICALSTATE
+TECHNICALMETHOD</div>
+
+          <pre class="formula-box">Final Device Text =
+weighted repetition
+of all metadata fields</pre>
+
+          
+
+        </div>
+
+      </div>
+
+    
+
+      <div class="nested-card level-0">
+
+        <div class="nested-header" onclick="toggleBox('nested_jnr8nz5')">
+
+          <div>
+            <div class="nested-title">Dynamic Repetition Logic</div>
+            <div class="nested-mini">Automatic semantic amplification</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="nested-content" id="nested_jnr8nz5">
+
+          <div class="nested-desc">Generic fields repeat fewer times.
+
+Highly specific medical fields repeat more times.
+
+No manual hardcoding required.</div>
+
+          <pre class="formula-box">Specific field
+↓
+Higher mean IDF
+↓
+More repetitions</pre>
+
+          
+
+        </div>
+
+      </div>
+
+    
+
+        </div>
+
+      </div>
+
+    
+
+      <div class="main-step">
+
+        <div class="main-header" onclick="toggleBox('step_5')">
+
+          <div>
+            <div class="main-title">Step 6 — Pure semantic matching engine</div>
+            <div class="main-mini">Cosine similarity retrieval</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="main-content" id="step_5">
+
+          <div class="main-desc">Cosine similarity between device embedding and filtered CPT matrix.
+
+Top-10 candidates selected by score threshold.</div>
+
+          <pre class="formula-box">sim_i =
+cosine(
+embed(device_text),
+cpt_matrix[search_idx_i]
+)
+
+pre_winners = {
+
+code_i |
+sim_i ≥ top_sim × SEMANTIC_TOP_FRACTION
+
+}</pre>
+
+          <div class="kpi-grid">
+
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Candidate pool</div>
+                <div class="kpi-value">Top-10 cosine matches</div>
+              </div>
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Threshold</div>
+                <div class="kpi-value">0.90 × top score</div>
+              </div>
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Output</div>
+                <div class="kpi-value">Pure cosine similarity</div>
+              </div>
+            
+
+          </div>
+
+          <div class="params-box">
+
+            
+              <span class="param-chip">RERANK_TOP_K = 40</span>
+            
+              <span class="param-chip">SEMANTIC_TOP_FRACTION = 0.90</span>
+            
+
+          </div>
+
+          
+
+      <div class="nested-card level-0">
+
+        <div class="nested-header" onclick="toggleBox('nested_5odx4kf')">
+
+          <div>
+            <div class="nested-title">Pre-Winner Selection</div>
+            <div class="nested-mini">Semantic filtering</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="nested-content" id="nested_5odx4kf">
+
+          <div class="nested-desc">Only high-confidence semantic matches survive initial retrieval.</div>
+
+          <pre class="formula-box">score ≥
+top_score × 0.90</pre>
+
+          
+
+        </div>
+
+      </div>
+
+    
+
+        </div>
+
+      </div>
+
+    
+
+      <div class="main-step">
+
+        <div class="main-header" onclick="toggleBox('step_6')">
+
+          <div>
+            <div class="main-title">Step 7 — ContextualReranker v6 — 4-component score</div>
+            <div class="main-mini">Hybrid reranking system</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="main-content" id="step_6">
+
+          <div class="main-desc">Re-scores top-40 candidates using four signals.
+
+Each component normalised to [0,1] then weighted and summed.</div>
+
+          <pre class="formula-box">final_score =
+
+norm(cos_sim)      × 0.45   ① Semantic
++ norm(anchor_score) × 0.28   ② Anchor
++ norm(bidir_score)  × 0.18   ③ Bidir
++ norm(spec_score)   × 0.09   ④ Specificity Gap (G2)</pre>
+
+          <div class="kpi-grid">
+
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Components</div>
+                <div class="kpi-value">Semantic · Anchor · Bidir · G2</div>
+              </div>
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Normalization</div>
+                <div class="kpi-value">[0,1]</div>
+              </div>
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Top Candidates</div>
+                <div class="kpi-value">40</div>
+              </div>
+            
+
+          </div>
+
+          <div class="params-box">
+
+            
+              <span class="param-chip">NEG_ANCHOR_THRESHOLD = 0.45</span>
+            
+              <span class="param-chip">MAX_POS_ANCHORS = 18</span>
+            
+
+          </div>
+
+          
+
+      <div class="nested-card level-0">
+
+        <div class="nested-header" onclick="toggleBox('nested_ivmesxl')">
+
+          <div>
+            <div class="nested-title">① Semantic (0.45)</div>
+            <div class="nested-mini">Embedding agreement</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="nested-content" id="nested_ivmesxl">
+
+          <div class="nested-desc">Normalised cosine similarity from step 6.</div>
+
+          <pre class="formula-box">cos(
+embed(device),
+embed(cpt)
+)</pre>
+
+          
+
+        </div>
+
+      </div>
+
+    
+
+      <div class="nested-card level-0">
+
+        <div class="nested-header" onclick="toggleBox('nested_ptideu7')">
+
+          <div>
+            <div class="nested-title">② Anchor (0.28)</div>
+            <div class="nested-mini">Positive + negative contextual anchors</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="nested-content" id="nested_ptideu7">
+
+          <div class="nested-desc">Positive anchors = top-IDF device tokens (up to 18).
+
+Negative anchors = tokens in ≥45% candidates but absent from device description.</div>
+
+          <pre class="formula-box">pos_hit − 0.60 × neg_hit
+
+pos_hit =
+matched_positive
+/
+total_positive
+
+neg_hit =
+matched_negative
+/
+total_negative</pre>
+
+          
+
+      <div class="nested-card level-1">
+
+        <div class="nested-header" onclick="toggleBox('nested_1hq8207')">
+
+          <div>
+            <div class="nested-title">Positive Anchors</div>
+            <div class="nested-mini">Rare semantic reinforcement</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="nested-content" id="nested_1hq8207">
+
+          <div class="nested-desc">Positive Anchors =
+frequency in device × IDF score.
+
+Positive anchors are top-IDF device tokens.
+
+These tokens represent highly specific medical concepts.
+
+The reranker rewards CPT codes containing these rare and highly relevant terms.</div>
+
+          <pre class="formula-box">anchor_score =
+frequency × IDF</pre>
+
+          
+
+        </div>
+
+      </div>
+
+    
+
+      <div class="nested-card level-1">
+
+        <div class="nested-header" onclick="toggleBox('nested_h133w8j')">
+
+          <div>
+            <div class="nested-title">Negative Anchors</div>
+            <div class="nested-mini">Wrong medical territory detection</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="nested-content" id="nested_h133w8j">
+
+          <div class="nested-desc">Negative anchors are distractor words.
+
+These are words appearing frequently inside candidate CPT codes but absent from the device description.
+
+They represent the wrong medical territory.
+
+Evaluation Process:
+
+• System examines all semantic search candidates.
+
+• Finds words appearing in ≥45% of returned CPT candidates.
+
+• Checks whether those words are absent from device description.
+
+• If absent:
+that word becomes a Negative Anchor.
+
+Example:
+
+Searching for "needle" may retrieve many biopsy codes.
+
+If device is a "suture needle" and never mentions biopsy:
+
+"biopsy" becomes a negative anchor.
+
+Those CPT codes are penalized.</div>
+
+          <pre class="formula-box">Negative Anchor Rule:
+
+candidate_word_frequency ≥ 45%
+AND
+word NOT IN device_description
+
+→ apply penalty</pre>
+
+          
+
+      <div class="nested-card level-2">
+
+        <div class="nested-header" onclick="toggleBox('nested_i4vtxax')">
+
+          <div>
+            <div class="nested-title">Penalty Logic</div>
+            <div class="nested-mini">Negative anchor suppression</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="nested-content" id="nested_i4vtxax">
+
+          <div class="nested-desc">More negative-anchor matches produce larger reranking penalties.</div>
+
+          <pre class="formula-box">final_anchor =
+positive_hits
+− 0.60 × negative_hits</pre>
+
+          
+
+        </div>
+
+      </div>
+
+    
+
+        </div>
+
+      </div>
+
+    
+
+        </div>
+
+      </div>
+
+    
+
+      <div class="nested-card level-0">
+
+        <div class="nested-header" onclick="toggleBox('nested_c5yxbyj')">
+
+          <div>
+            <div class="nested-title">③ Bidir (0.18)</div>
+            <div class="nested-mini">Bidirectional semantic consistency</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="nested-content" id="nested_c5yxbyj">
+
+          <div class="nested-desc">Average of:
+
+(device embedding · CPT embedding)
+
+and
+
+(anchor phrase embedding · CPT embedding)
+
+Reduces one-direction semantic bias.</div>
+
+          <pre class="formula-box">bidir =
+(fwd_sim + anchor_sim)
+/ 2</pre>
+
+          
+
+        </div>
+
+      </div>
+
+    
+
+      <div class="nested-card level-0">
+
+        <div class="nested-header" onclick="toggleBox('nested_xe3tkko')">
+
+          <div>
+            <div class="nested-title">④ Specificity gap G2 (0.09)</div>
+            <div class="nested-mini">Rare-token overlap scoring</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="nested-content" id="nested_xe3tkko">
+
+          <div class="nested-desc">Fraction of device high-IDF tokens appearing inside CPT code.
+
+Breaks generic vs specific ties.</div>
+
+          <pre class="formula-box">|spec_device ∩ cpt_tokens|
+/
+|spec_device|</pre>
+
+          
+
+      <div class="nested-card level-1">
+
+        <div class="nested-header" onclick="toggleBox('nested_87g9538')">
+
+          <div>
+            <div class="nested-title">High-IDF Token Selection</div>
+            <div class="nested-mini">Specific-token extraction</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="nested-content" id="nested_87g9538">
+
+          <div class="nested-desc">Only tokens above p70 IDF threshold become specificity tokens.</div>
+
+          <pre class="formula-box">spec_device =
+tokens where
+
+IDF &gt; percentile70</pre>
+
+          
+
+        </div>
+
+      </div>
+
+    
+
+        </div>
+
+      </div>
+
+    
+
+        </div>
+
+      </div>
+
+    
+
+      <div class="main-step">
+
+        <div class="main-header" onclick="toggleBox('step_7')">
+
+          <div>
+            <div class="main-title">Step 8 — select_authentic_codes() — G3 multi-code output</div>
+            <div class="main-mini">Authentic CPT selection</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="main-content" id="step_7">
+
+          <div class="main-desc">Selects up to 5 genuinely matching CPT codes.
+
+Three sequential filters applied.</div>
+
+          <pre class="formula-box">qualify(code_i) =
+
+(prev_score − score_i)
+&lt; CLIFF_THRESHOLD
+
+AND
+
+(top_score − score_i)
+≤ AUTHENTIC_SCORE_BAND
+
+AND
+
+spec_score_i
+≥ SPECIFICITY_FLOOR
+
+AND
+
+count &lt; MAX_AUTHENTIC_CODES</pre>
+
+          <div class="kpi-grid">
+
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Cliff threshold</div>
+                <div class="kpi-value">0.08</div>
+              </div>
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Band filter</div>
+                <div class="kpi-value">0.12</div>
+              </div>
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Specificity floor</div>
+                <div class="kpi-value">0.05</div>
+              </div>
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Max authentic codes</div>
+                <div class="kpi-value">5</div>
+              </div>
+            
+
+          </div>
+
+          <div class="params-box">
+
+            
+              <span class="param-chip">CLIFF_THRESHOLD = 0.08</span>
+            
+              <span class="param-chip">AUTHENTIC_SCORE_BAND = 0.12</span>
+            
+              <span class="param-chip">SPECIFICITY_FLOOR = 0.05</span>
+            
+              <span class="param-chip">MAX_AUTHENTIC_CODES = 5</span>
+            
+
+          </div>
+
+          
+
+      <div class="nested-card level-0">
+
+        <div class="nested-header" onclick="toggleBox('nested_5oiegns')">
+
+          <div>
+            <div class="nested-title">① Cliff Detector</div>
+            <div class="nested-mini">Quality cliff stopping</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="nested-content" id="nested_5oiegns">
+
+          <div class="nested-desc">If score suddenly drops ≥0.08 between consecutive codes:
+
+Stop adding more codes.</div>
+
+          <pre class="formula-box">prev_score − score_i ≥ 0.08</pre>
+
+          
+
+        </div>
+
+      </div>
+
+    
+
+      <div class="nested-card level-0">
+
+        <div class="nested-header" onclick="toggleBox('nested_t10ahrc')">
+
+          <div>
+            <div class="nested-title">② Band Filter</div>
+            <div class="nested-mini">Top-score proximity</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="nested-content" id="nested_t10ahrc">
+
+          <div class="nested-desc">Code must remain within 0.12 of best score.</div>
+
+          <pre class="formula-box">top_score − score_i ≤ 0.12</pre>
+
+          
+
+        </div>
+
+      </div>
+
+    
+
+      <div class="nested-card level-0">
+
+        <div class="nested-header" onclick="toggleBox('nested_oxqfv3d')">
+
+          <div>
+            <div class="nested-title">③ Specificity Floor</div>
+            <div class="nested-mini">Rare-token overlap requirement</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="nested-content" id="nested_oxqfv3d">
+
+          <div class="nested-desc">Code must contain some overlap with rare device tokens.</div>
+
+          <pre class="formula-box">spec_score ≥ 0.05</pre>
+
+          
+
+        </div>
+
+      </div>
+
+    
+
+        </div>
+
+      </div>
+
+    
+
+      <div class="main-step">
+
+        <div class="main-header" onclick="toggleBox('step_8')">
+
+          <div>
+            <div class="main-title">Step 9 — Output — cpt_predictions.csv</div>
+            <div class="main-mini">Final export</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="main-content" id="step_8">
+
+          <div class="main-desc">All input columns preserved.
+
+8 new prediction columns appended.
+
+One row per device record.</div>
+
+          <pre class="formula-box">Input Device
+↓
+Prediction Pipeline
+↓
+cpt_predictions.csv</pre>
+
+          <div class="kpi-grid">
+
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Prediction columns</div>
+                <div class="kpi-value">8</div>
+              </div>
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Output</div>
+                <div class="kpi-value">CSV</div>
+              </div>
+            
+              <div class="kpi-card">
+                <div class="kpi-key">Rows</div>
+                <div class="kpi-value">1 per device</div>
+              </div>
+            
+
+          </div>
+
+          <div class="params-box">
+
+            
+
+          </div>
+
+          
+
+        </div>
+
+      </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const steps = [
+
+{
+  title:"Step 1 — Load & filter CPT codes",
+  mini:"CSV filtering and preprocessing",
+
+  desc:`Read lookup CSV → keep only 5-digit numeric CPT codes → reset index.`,
+
+  formula:`Regex Pattern:
+^\\d{5}$`,
+
+  kpis:[
+    ["Filter pattern","^\\d{5}$"],
+    ["Key columns","CODE · LONG_DESC · SUBCATEGORY"],
+    ["Output","cpt_db — N-row DataFrame"]
+  ],
+
+  params:[],
+
+  children:[]
+},
+
+{
+  title:"Step 2 — Build CPT text & embedding matrix",
+  mini:"BioBERT semantic encoding",
+
+  desc:`build_cpt_text(): long description + short description, stop word-cleaned → BioBERT encodes all rows at once.`,
+
+  formula:`text = clean(long_desc + short_desc)
+
+matrix shape =
+[N_cpt × 768]
+
+float32
+(L2-normalised)`,
+
+  kpis:[
+    ["Encoding","L2-normalised"],
+    ["Embedding Size","768"],
+    ["Data Type","float32"]
+  ],
+
+  params:[
+    "MODEL = BioBERT-mnli-scinli-mednli-stsb"
+  ],
+
+  children:[
+
+    {
+      title:"Text Cleaning",
+      mini:"Preprocessing pipeline",
+
+      desc:`Combines long and short descriptions.
+
+Stop words are removed before encoding.
+
+Output becomes semantically compressed medical text.`,
+
+      formula:`clean(
+long_desc + short_desc
+)`,
+
+      children:[]
+    },
+
+    {
+      title:"BioBERT Encoding",
+      mini:"Medical semantic embeddings",
+
+      desc:`All CPT rows are encoded simultaneously into dense semantic vectors using BioBERT.`,
+
+      formula:`BioBERT(text)
+↓
+768-dimensional embedding`,
+
+      children:[]
+    }
+
+  ]
+},
+
+{
+  title:"Step 3 — Build corpus IDF table (G1)",
+  mini:"Dynamic token weighting",
+
+  desc:`Compute IDF for every token across all CPT_processed_text.
+
+Powers dynamic field weighting in build_device_text().`,
+
+  formula:`IDF(tok) =
+log((1 + N)/(1 + df_in_corpus))
+
+where:
+
+N = total CPT docs
+df = document frequency of token`,
+
+  kpis:[
+    ["Coverage","All unique tokens in cpt_db"],
+    ["Used by","G1 · G2 · Positive Anchors"]
+  ],
+
+  params:[
+  
+  ],
+
+  children:[
+
+    {
+      title:"Dynamic Weight Scaling",
+      mini:"Rare vocabulary amplification",
+
+      desc:`Rare tokens receive larger IDF scores.
+
+Higher IDF results in stronger weighting during device text construction.`,
+
+      formula:`Rare token
+↓
+Higher IDF
+↓
+Higher semantic influence`,
+
+      children:[]
+    }
+
+  ]
+},
+
+{
+  title:"Step 4 — SubcategoryRouter init",
+  mini:"Search-space reduction",
+
+  desc:`Embeds all unique CPT subcategory names.
+
+At query time, cosine-matches device subcategory → selects narrow CPT search pool.`,
+
+  formula:`sim =
+cosine(
+embed(device_subcat),
+embed(cpt_subcat_i)
+)
+
+select if:
+sim ≥ SUBCAT_SIM_THRESHOLD`,
+
+  kpis:[
+    ["Match threshold","cosine ≥ 0.70"],
+    ["Max subcategories","3"],
+    ["Fallback","Search ALL CPT codes"]
+  ],
+
+  params:[
+    "SUBCAT_SIM_THRESHOLD = 0.70",
+    "MAX_EXTRA_SUBCATEGORIES = 3"
+  ],
+
+  children:[
+
+    {
+      title:"Fallback Mechanism",
+      mini:"Recovery search path",
+
+      desc:`If no subcategory satisfies similarity threshold:
+
+System searches entire CPT corpus.`,
+
+      formula:`No match
+↓
+Fallback = TRUE
+↓
+Search all CPT codes`,
+
+      children:[]
+    }
+
+  ]
+},
+
+{
+  title:"Step 5 — build_device_text() — G1 dynamic field weighting",
+  mini:"Weighted metadata representation",
+
+  desc:`Assembles device query text from 7 metadata fields.
+
+Each field repeated 1–5× based on mean corpus IDF.
+
+Fields with rare/specific vocabulary receive higher weighting automatically.`,
+
+  formula:`repeat(field) = clip(
+
+FIELD_IDF_WEIGHT_MIN
++
+round(
+
+mean_idf(field_tokens)
+/ max_corpus_idf
+
+×
+
+(FIELD_IDF_WEIGHT_MAX
+- FIELD_IDF_WEIGHT_MIN)
+
+),
+
+1,
+5
+
+)`,
+
+  kpis:[
+    ["Fields","7 metadata fields"],
+    ["Repeat range","1× → 5×"],
+    ["Definition Prefix","150 chars"]
+  ],
+
+  params:[
+    "DEFINITION_PREFIX_LEN = 150",
+    "FIELD_IDF_WEIGHT_MIN = 1",
+    "FIELD_IDF_WEIGHT_MAX = 5"
+  ],
+
+  children:[
+
+    {
+      title:"7 Metadata Fields",
+      mini:"Device semantic construction",
+
+      desc:`DEFINITION
+productCodeName
+DEVICENAME
+deviceDescription
+TARGETAREA
+PHYSICALSTATE
+TECHNICALMETHOD`,
+
+      formula:`Final Device Text =
+weighted repetition
+of all metadata fields`,
+
+      children:[]
+    },
+
+    {
+      title:"Dynamic Repetition Logic",
+      mini:"Automatic semantic amplification",
+
+      desc:`Generic fields repeat fewer times.
+
+Highly specific medical fields repeat more times.
+
+No manual hardcoding required.`,
+
+      formula:`Specific field
+↓
+Higher mean IDF
+↓
+More repetitions`,
+
+      children:[]
+    }
+
+  ]
+},
+
+{
+  title:"Step 6 — Pure semantic matching engine",
+  mini:"Cosine similarity retrieval",
+
+  desc:`Cosine similarity between device embedding and filtered CPT matrix.
+
+Top-10 candidates selected by score threshold.`,
+
+  formula:`sim_i =
+cosine(
+embed(device_text),
+cpt_matrix[search_idx_i]
+)
+
+pre_winners = {
+
+code_i |
+sim_i ≥ top_sim × SEMANTIC_TOP_FRACTION
+
+}`,
+
+  kpis:[
+    ["Candidate pool","Top-10 cosine matches"],
+    ["Threshold","0.90 × top score"],
+    ["Output","Pure cosine similarity"]
+  ],
+
+  params:[
+    "RERANK_TOP_K = 40",
+    "SEMANTIC_TOP_FRACTION = 0.90"
+  ],
+
+  children:[
+
+    {
+      title:"Pre-Winner Selection",
+      mini:"Semantic filtering",
+
+      desc:`Only high-confidence semantic matches survive initial retrieval.`,
+
+      formula:`score ≥
+top_score × 0.90`,
+
+      children:[]
+    }
+
+  ]
+},
+
+{
+  title:"Step 7 — ContextualReranker v6 — 4-component score",
+  mini:"Hybrid reranking system",
+
+  desc:`Re-scores top-40 candidates using four signals.
+
+Each component normalised to [0,1] then weighted and summed.`,
+
+  formula:`final_score =
+
+norm(cos_sim)      × 0.45   ① Semantic
++ norm(anchor_score) × 0.28   ② Anchor
++ norm(bidir_score)  × 0.18   ③ Bidir
++ norm(spec_score)   × 0.09   ④ Specificity Gap (G2)`,
+
+  kpis:[
+    ["Components","Semantic · Anchor · Bidir · G2"],
+    ["Normalization","[0,1]"],
+    ["Top Candidates","40"]
+  ],
+
+  params:[
+    "NEG_ANCHOR_THRESHOLD = 0.45",
+    "MAX_POS_ANCHORS = 18"
+  ],
+
+  children:[
+
+    {
+      title:"① Semantic (0.45)",
+      mini:"Embedding agreement",
+
+      desc:`Normalised cosine similarity from step 6.`,
+
+      formula:`cos(
+embed(device),
+embed(cpt)
+)`,
+
+      children:[]
+    },
+
+    {
+      title:"② Anchor (0.28)",
+      mini:"Positive + negative contextual anchors",
+
+      desc:`Positive anchors = top-IDF device tokens (up to 18).
+
+Negative anchors = tokens in ≥45% candidates but absent from device description.`,
+
+      formula:`pos_hit − 0.60 × neg_hit
+
+pos_hit =
+matched_positive
+/
+total_positive
+
+neg_hit =
+matched_negative
+/
+total_negative`,
+
+      children:[
+
+        {
+          title:"Positive Anchors",
+          mini:"Rare semantic reinforcement",
+
+          desc:`Positive Anchors =
+frequency in device × IDF score.
+
+Positive anchors are top-IDF device tokens.
+
+These tokens represent highly specific medical concepts.
+
+The reranker rewards CPT codes containing these rare and highly relevant terms.`,
+
+          formula:`anchor_score =
+frequency × IDF`,
+
+          children:[]
+        },
+
+        {
+          title:"Negative Anchors",
+          mini:"Wrong medical territory detection",
+
+          desc:`Negative anchors are distractor words.
+
+These are words appearing frequently inside candidate CPT codes but absent from the device description.
+
+They represent the wrong medical territory.
+
+Evaluation Process:
+
+• System examines all semantic search candidates.
+
+• Finds words appearing in ≥45% of returned CPT candidates.
+
+• Checks whether those words are absent from device description.
+
+• If absent:
+that word becomes a Negative Anchor.
+
+Example:
+
+Searching for "needle" may retrieve many biopsy codes.
+
+If device is a "suture needle" and never mentions biopsy:
+
+"biopsy" becomes a negative anchor.
+
+Those CPT codes are penalized.`,
+
+          formula:`Negative Anchor Rule:
+
+candidate_word_frequency ≥ 45%
+AND
+word NOT IN device_description
+
+→ apply penalty`,
+
+          children:[
+
+            {
+              title:"Penalty Logic",
+              mini:"Negative anchor suppression",
+
+              desc:`More negative-anchor matches produce larger reranking penalties.`,
+
+              formula:`final_anchor =
+positive_hits
+− 0.60 × negative_hits`,
+
+              children:[]
+            }
+
+          ]
+        }
+
+      ]
+    },
+
+    {
+      title:"③ Bidir (0.18)",
+      mini:"Bidirectional semantic consistency",
+
+      desc:`Average of:
+
+(device embedding · CPT embedding)
+
+and
+
+(anchor phrase embedding · CPT embedding)
+
+Reduces one-direction semantic bias.`,
+
+      formula:`bidir =
+(fwd_sim + anchor_sim)
+/ 2`,
+
+      children:[]
+    },
+
+    {
+      title:"④ Specificity gap G2 (0.09)",
+      mini:"Rare-token overlap scoring",
+
+      desc:`Fraction of device high-IDF tokens appearing inside CPT code.
+
+Breaks generic vs specific ties.`,
+
+      formula:`|spec_device ∩ cpt_tokens|
+/
+|spec_device|`,
+
+      children:[
+
+        {
+          title:"High-IDF Token Selection",
+          mini:"Specific-token extraction",
+
+          desc:`Only tokens above p70 IDF threshold become specificity tokens.`,
+
+          formula:`spec_device =
+tokens where
+
+IDF > percentile70`,
+
+          children:[]
+        }
+
+      ]
+    }
+
+  ]
+},
+
+{
+  title:"Step 8 — select_authentic_codes() — G3 multi-code output",
+  mini:"Authentic CPT selection",
+
+  desc:`Selects up to 5 genuinely matching CPT codes.
+
+Three sequential filters applied.`,
+
+  formula:`qualify(code_i) =
+
+(prev_score − score_i)
+< CLIFF_THRESHOLD
+
+AND
+
+(top_score − score_i)
+≤ AUTHENTIC_SCORE_BAND
+
+AND
+
+spec_score_i
+≥ SPECIFICITY_FLOOR
+
+AND
+
+count < MAX_AUTHENTIC_CODES`,
+
+  kpis:[
+    ["Cliff threshold","0.08"],
+    ["Band filter","0.12"],
+    ["Specificity floor","0.05"],
+    ["Max authentic codes","5"]
+  ],
+
+  params:[
+    "CLIFF_THRESHOLD = 0.08",
+    "AUTHENTIC_SCORE_BAND = 0.12",
+    "SPECIFICITY_FLOOR = 0.05",
+    "MAX_AUTHENTIC_CODES = 5"
+  ],
+
+  children:[
+
+    {
+      title:"① Cliff Detector",
+      mini:"Quality cliff stopping",
+
+      desc:`If score suddenly drops ≥0.08 between consecutive codes:
+
+Stop adding more codes.`,
+
+      formula:`prev_score − score_i ≥ 0.08`,
+
+      children:[]
+    },
+
+    {
+      title:"② Band Filter",
+      mini:"Top-score proximity",
+
+      desc:`Code must remain within 0.12 of best score.`,
+
+      formula:`top_score − score_i ≤ 0.12`,
+
+      children:[]
+    },
+
+    {
+      title:"③ Specificity Floor",
+      mini:"Rare-token overlap requirement",
+
+      desc:`Code must contain some overlap with rare device tokens.`,
+
+      formula:`spec_score ≥ 0.05`,
+
+      children:[]
+    }
+
+  ]
+},
+
+{
+  title:"Step 9 — Output — cpt_predictions.csv",
+  mini:"Final export",
+
+  desc:`All input columns preserved.
+
+8 new prediction columns appended.
+
+One row per device record.`,
+
+  formula:`Input Device
+↓
+Prediction Pipeline
+↓
+cpt_predictions.csv`,
+
+  kpis:[
+    ["Prediction columns","8"],
+    ["Output","CSV"],
+    ["Rows","1 per device"]
+  ],
+
+  params:[],
+
+  children:[]
+}
+
+];
+
+
+
+function createNested(children, level = 0){
+
+  if(!children || !children.length) return "";
+
+  return children.map((child)=>{
+
+    const id = "nested_" + Math.random().toString(36).substring(2,9);
+
+    return `
+
+      <div class="nested-card level-${level}">
+
+        <div class="nested-header"
+             onclick="toggleBox('${id}')">
+
+          <div>
+            <div class="nested-title">${child.title}</div>
+            <div class="nested-mini">${child.mini || ""}</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="nested-content" id="${id}">
+
+          ${
+            child.desc
+            ? `<div class="nested-desc">${child.desc}</div>`
+            : ""
+          }
+
+          ${
+            child.formula
+            ? `<pre class="formula-box">${child.formula}</pre>`
+            : ""
+          }
+
+          ${
+            child.children
+            ? createNested(child.children, level + 1)
+            : ""
+          }
+
+        </div>
+
+      </div>
+
+    `;
+
+  }).join("");
+
+}
+
+
+
+function renderSteps(){
+
+  const root = document.getElementById("pipeline");
+
+  root.innerHTML = steps.map((step,index)=>{
+
+    const id = "step_" + index;
+
+    return `
+
+      <div class="main-step">
+
+        <div class="main-header"
+             onclick="toggleBox('${id}')">
+
+          <div>
+            <div class="main-title">${step.title}</div>
+            <div class="main-mini">${step.mini}</div>
+          </div>
+
+          <div>▶</div>
+
+        </div>
+
+        <div class="main-content" id="${id}">
+
+          <div class="main-desc">${step.desc}</div>
+
+          <pre class="formula-box">${step.formula}</pre>
+
+          <div class="kpi-grid">
+
+            ${step.kpis.map(k => `
+              <div class="kpi-card">
+                <div class="kpi-key">${k[0]}</div>
+                <div class="kpi-value">${k[1]}</div>
+              </div>
+            `).join("")}
+
+          </div>
+
+          <div class="params-box">
+
+            ${step.params.map(p => `
+              <span class="param-chip">${p}</span>
+            `).join("")}
+
+          </div>
+
+          ${createNested(step.children)}
+
+        </div>
+
+      </div>
+
+    `;
+
+  }).join("");
+
+}
+function downloadHTML(){
+
+  const htmlContent =
+    document.documentElement.outerHTML;
+
+  const blob = new Blob(
+    [htmlContent],
+    { type:"text/html" }
+  );
+
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+
+  a.href = url;
+
+  a.download =
+    "cpt_pipeline_explorer.html";
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  document.body.removeChild(a);
+
+  URL.revokeObjectURL(url);
+
+}
+
+
+function toggleBox(id){
+
+  const el = document.getElementById(id);
+
+  el.classList.toggle("open");
+
+}
+
+
+
+renderSteps();
+
+</script>
+
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+</body></html>
